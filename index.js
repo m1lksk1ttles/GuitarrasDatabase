@@ -4,27 +4,26 @@ const mysql = require('mysql2');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
-
-connection.connect(err => {
-  if (err) {
-    console.error('Error al conectar a MySQL:', err);
-    return;
-  }
-  console.log('Conectado a MySQL');
+  port: process.env.DB_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 app.get('/', (req, res) => {
-  connection.query('SELECT * FROM guitarras', (err, results) => {
+  pool.query('SELECT * FROM guitarras', (err, results) => {
     if (err) {
       console.error('Error al ejecutar la consulta:', err);
-      return res.status(500).send('Error en la base de datos');
+      return res.send('Error en la base de datos');
+    }
+
+    if (results.length === 0) {
+      return res.send('La tabla está vacía.');
     }
 
     let html = '<h1>Datos de la tabla</h1><table border="1"><tr>';
