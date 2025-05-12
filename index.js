@@ -26,7 +26,8 @@ app.get('/', (req, res) => {
       return res.send('La tabla está vacía.');
     }
 
-    let html = '<h1>Datos de la tabla</h1><table border="1"><tr>';
+        let html = '<h1>Guitarras que he tenido</h1><table border="1"><tr>A unas las extrano mas que otras';
+
     Object.keys(results[0]).forEach(col => {
       html += `<th>${col}</th>`;
     });
