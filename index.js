@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 5000;
 
 // Configura tu conexión a MySQL
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: 'mysql://root:lCvVOMLVAVKSadzzYnsoWyZIZfPXRYXl@yamabiko.proxy.rlwy.net:38807/railway',
   user: 'root',
   password: '', // O pon la contraseña correcta si tiene
   database: 'c22100440',
