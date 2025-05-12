@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Configura tu conexión a MySQL
 const connection = mysql.createConnection({
