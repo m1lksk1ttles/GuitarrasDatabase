@@ -21,12 +21,10 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// Ruta para servir index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Ruta para obtener los datos
 app.get('/api/guitarras', (req, res) => {
   pool.query('SELECT * FROM guitarras', (err, results) => {
     if (err) {
@@ -39,17 +37,10 @@ app.get('/api/guitarras', (req, res) => {
 });
 
 
-// Ruta para insertar nueva guitarra
 app.post('/agregar', (req, res) => {
-  const { Marca, Modelo, Configuracion, CantPots } = req.body;
-  
-  // Validación básica
-  if (!Marca || !Modelo || !Configuracion || !CantPots) {
-    return res.status(400).send('Todos los campos son requeridos');
-  }
-
-  pool.query('INSERT INTO guitarras (Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?)', 
-    [Marca, Modelo, Configuracion, CantPots], 
+  const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
+  pool.query('INSERT INTO guitarras (idGuitarra, Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?, ?)', 
+    [idGuitarra, Marca, Modelo, Configuracion, CantPots], 
     (err, results) => {
       if (err) {
         console.error('Error al insertar:', err);
