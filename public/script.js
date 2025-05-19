@@ -45,5 +45,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     form.submit();
   });
+
+  document.getElementById('actualizarBtn').addEventListener('click', () => {
+    const accionInput = document.createElement('input');
+    accionInput.type = 'hidden';
+    accionInput.name = 'accion';
+    accionInput.value = 'actualizar';
+    form.appendChild(accionInput);
+    form.submit();
+  });
   
 });

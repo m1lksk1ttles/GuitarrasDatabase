@@ -85,10 +85,32 @@ app.post('/accion', (req, res) => {
         res.redirect('/');
       }
     );
+  } else if (accion === 'actualizar') {
+    if (!idGuitarra || isNaN(idGuitarra)) {
+      return res.status(400).send('ID inválido para actualizar');
+    }
+
+    pool.query(
+      'UPDATE guitarras SET Marca = ?, Modelo = ?, Configuracion = ?, CantPots = ? WHERE idGuitarra = ?',
+      [Marca, Modelo, Configuracion, CantPots, idGuitarra],
+      (err, results) => {
+        if (err) {
+          console.error('Error al actualizar:', err);
+          return res.status(500).send('Error al actualizar guitarra');
+        }
+
+        if (results.affectedRows === 0) {
+          return res.status(404).send('Guitarra no encontrada para actualizar');
+        }
+
+        res.redirect('/');
+      }
+    );
   } else {
     res.status(400).send('Acción desconocida');
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
