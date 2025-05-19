@@ -36,38 +36,58 @@ app.get('/api/guitarras', (req, res) => {
   });
 });
 
-app.delete('/api/guitarras/:id', (req, res) => {
-  const idGuitarra = req.params.id;
-  
-  if (!idGuitarra || isNaN(idGuitarra)) {
-    return res.status(400).json({ error: 'ID inválido' });
-  }
-
-  pool.query('DELETE FROM guitarras WHERE idGuitarra = ?', [idGuitarra], (err, results) => {
-    if (err) {
-      console.error('Error al eliminar:', err);
-      return res.status(500).json({ error: 'Error al eliminar guitarra' });
-    }
-    
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ error: 'Guitarra no encontrada' });
-    }
-    
-    res.json({ success: true });
-  });
-});
-
-app.post('/agregar', (req, res) => {
-  const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
-  pool.query('INSERT INTO guitarras (idGuitarra, Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?, ?)', 
-    [idGuitarra, Marca, Modelo, Configuracion, CantPots], 
+app.delete('/eliminar', (req, res) => {
+  const { idGuitarra} = req.body;
+  pool.delete('DELETE (idGuitarras) FROM guitarras VALUES (?)', 
+    [idGuitarra], 
     (err, results) => {
       if (err) {
-        console.error('Error al insertar:', err);
-        return res.status(500).send('Error al insertar en la base de datos');
+        console.error('Error al borrar:', err);
+        return res.status(500).send('Error al eliminar en la base de datos');
       }
       res.redirect('/');
     });
+});
+
+app.post('/accion', (req, res) => {
+  const { accion, idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
+
+  if (accion === 'agregar') {
+    pool.query(
+      'INSERT INTO guitarras (idGuitarra, Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?, ?)',
+      [idGuitarra, Marca, Modelo, Configuracion, CantPots],
+      (err, results) => {
+        if (err) {
+          console.error('Error al insertar:', err);
+          return res.status(500).send('Error al insertar en la base de datos');
+        }
+        res.redirect('/');
+      }
+    );
+  } else if (accion === 'eliminar') {
+    if (!idGuitarra || isNaN(idGuitarra)) {
+      return res.status(400).send('ID inválido para eliminación');
+    }
+
+    pool.query(
+      'DELETE FROM guitarras WHERE idGuitarra = ?',
+      [idGuitarra],
+      (err, results) => {
+        if (err) {
+          console.error('Error al eliminar:', err);
+          return res.status(500).send('Error al eliminar guitarra');
+        }
+
+        if (results.affectedRows === 0) {
+          return res.status(404).send('Guitarra no encontrada');
+        }
+
+        res.redirect('/');
+      }
+    );
+  } else {
+    res.status(400).send('Acción desconocida');
+  }
 });
 
 app.listen(PORT, () => {

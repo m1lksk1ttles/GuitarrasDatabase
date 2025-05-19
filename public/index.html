@@ -40,15 +40,15 @@
     </div>
     <div id="caja2" class="caja">
       <h2>Agregar Guitarra</h2>
-      <form action="/agregar" method="POST">
+      <form id="formGuitarra" method="POST" action="/accion">
         <label>idGuitarra: <input type="number" name="idGuitarra" required></label><br><br>
-        <label>Marca: <input type="" name="Marca" required></label><br><br>
+        <label>Marca: <input type="text" name="Marca" required></label><br><br>
         <label>Modelo: <input type="text" name="Modelo" required></label><br><br>
         <label>Configuracion: <input type="text" name="Configuracion" required></label><br><br>
         <label>Cantidad de Potenciometros: <input type="number" name="CantPots" required></label><br><br>
-        <button type="submit">Agregar</button>
-        <button type="button" id="eliminarBtn">Eliminar</button>
-      </form>
+       <button type="submit" name="accion" value="agregar">Agregar</button>
+       <button type="submit" name="accion" value="eliminar">Eliminar</button>
+     </form>
     </div>
     <div id="caja3" class="caja">
       <h2>Lista de Guitarras</h2>
