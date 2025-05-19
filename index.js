@@ -22,24 +22,26 @@ const pool = mysql.createPool({
 });
 
 // Ruta para servir index.html
-app.get('/guitarras', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Ruta para obtener los datos
-app.get('/guitarras', (req, res) => {
+app.get('/api/guitarras', (req, res) => {
   pool.query('SELECT * FROM guitarras', (err, results) => {
     if (err) {
-      console.error('Error al ejecutar la consulta:', err);
-      return res.status(500).send('Error en la base de datos');
+      console.error('Error en DB:', err);
+      return res.status(500).json({ error: 'Error en la base de datos' });
     }
+
     res.json(results);
   });
 });
 
+
 // Ruta para insertar nueva guitarra
-app.post('/guitarras', (req, res) => {
-  const { Marca, Modelo } = req.body;
+app.post('/agregar', (req, res) => {
+  const { Marca, Modelo, Configuracion, CantPots } = req.body;
   pool.query('INSERT INTO guitarras (marca, modelo) VALUES (?, ?)', [marca, modelo], (err, results) => {
     if (err) {
       console.error('Error al insertar:', err);

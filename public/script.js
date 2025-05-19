@@ -1,29 +1,35 @@
-window.onload = () => {
-  fetch('/guitarras')
-    .then(response => response.json())
+window.addEventListener('DOMContentLoaded', () => {
+  fetch('/api/guitarras')
+    .then(res => res.json())
     .then(data => {
-      const tabla = document.createElement('table');
-      if (data.length === 0) {
-        tabla.innerHTML = '<tr><td>No hay guitarras aún.</td></tr>';
-      } else {
-        const header = document.createElement('tr');
-        Object.keys(data[0]).forEach(key => {
-          const th = document.createElement('th');
-          th.textContent = key;
-          header.appendChild(th);
-        });
-        tabla.appendChild(header);
-
-        data.forEach(row => {
-          const tr = document.createElement('tr');
-          Object.values(row).forEach(value => {
-            const td = document.createElement('td');
-            td.textContent = value;
-            tr.appendChild(td);
-          });
-          tabla.appendChild(tr);
-        });
+      const container = document.getElementById('caja3');
+      if (!data.length) {
+        container.innerHTML = '<p>No hay guitarras registradas todavía.</p>';
+        return;
       }
-      document.getElementById('tabla').appendChild(tabla);
+
+      let html = '<h2>A unas las extraño más que otras</h2><table border="1"><tr>';
+
+      // Encabezados
+      Object.keys(data[0]).forEach(col => {
+        html += `<th>${col}</th>`;
+      });
+      html += '</tr>';
+
+      // Filas
+      data.forEach(row => {
+        html += '<tr>';
+        Object.values(row).forEach(val => {
+          html += `<td>${val}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</table>';
+      container.innerHTML = html;
+    })
+    .catch(err => {
+      console.error('Error cargando guitarras:', err);
+      document.getElementById('caja3').innerHTML = '<p>Error cargando datos.</p>';
     });
-};
+});
