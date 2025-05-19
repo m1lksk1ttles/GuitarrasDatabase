@@ -36,6 +36,26 @@ app.get('/api/guitarras', (req, res) => {
   });
 });
 
+app.delete('/api/guitarras/:id', (req, res) => {
+  const idGuitarra = req.params.id;
+  
+  if (!idGuitarra || isNaN(idGuitarra)) {
+    return res.status(400).json({ error: 'ID inválido' });
+  }
+
+  pool.query('DELETE FROM guitarras WHERE idGuitarra = ?', [idGuitarra], (err, results) => {
+    if (err) {
+      console.error('Error al eliminar:', err);
+      return res.status(500).json({ error: 'Error al eliminar guitarra' });
+    }
+    
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Guitarra no encontrada' });
+    }
+    
+    res.json({ success: true });
+  });
+});
 
 app.post('/agregar', (req, res) => {
   const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;

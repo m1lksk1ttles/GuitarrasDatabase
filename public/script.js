@@ -32,4 +32,30 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error('Error cargando guitarras:', err);
       document.getElementById('caja3').innerHTML = '<p>Error cargando datos.</p>';
     });
+
+    eliminarBtn.addEventListener('click', () => {
+    const id = form.idGuitarra.value;
+    if (!id || isNaN(id)) {
+      alert('Ingresa un ID válido para eliminar.');
+      return;
+    }
+
+    fetch(`/api/guitarras/${id}`, {
+      method: 'DELETE'
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          alert('Guitarra eliminada correctamente');
+        } else {
+          alert(result.error || 'No se pudo eliminar');
+        }
+        form.reset();
+        cargarGuitarras();
+      })
+      .catch(err => {
+        console.error('Error al eliminar guitarra:', err);
+        alert('Error al eliminar guitarra');
+      });
+  });
 });
