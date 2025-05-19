@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Base de Datos de Guitarras</title>
+  <style>
+    body {
+      font-family: 'Trebuchet MS', sans-serif;
+      background-color: beige;
+    }
+    .contenedor {
+      display: grid;
+      width: 100vw;
+      height: 100vh;
+      grid-template-columns: 30% 70%;
+      grid-template-rows: 20% 80%;
+      grid-template-areas: "barrasup barrasup" "contenido database";
+    }
+    .caja {
+      background-color: white;
+      border: 2px solid gray;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    #caja1 { grid-area: barrasup; text-align: center; }
+    #caja2 { grid-area: contenido; }
+    #caja3 { grid-area: database; }
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <div id="caja1" class="caja">
+      <h1>BASE DE DATOS DE LAS GUITARRAS QUE HE TENIDO</h1>
+      <p>más de las que yo pensaba la verdad</p>
+    </div>
+    <div id="caja2" class="caja">
+      <h2>Agregar Guitarra</h2>
+      <form action="/agregar" method="POST">
+        <label>Marca: <input type="text" name="Marca" required></label><br><br>
+        <label>Modelo: <input type="text" name="Modeo" required></label><br><br>
+        <label>Configuracion: <input type="text" name="Configuracion" required></label><br><br>
+        <label>Cantidad de Potenciometros: <input type="text" name="CantPots" required></label><br><br>
+        <button type="submit">Agregar</button>
+      </form>
+    </div>
+    <div id="caja3" class="caja">
+      <h2>Lista de Guitarras</h2>
+      <div id="tabla"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

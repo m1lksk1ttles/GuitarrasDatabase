@@ -1,8 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
+const path = require('path');
+const bodyParser = require('body-parser');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(express.static('public')); // Para servir archivos estáticos
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -15,34 +21,31 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
+// Ruta para servir index.html
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Ruta para obtener los datos
+app.get('/guitarras', (req, res) => {
   pool.query('SELECT * FROM guitarras', (err, results) => {
     if (err) {
       console.error('Error al ejecutar la consulta:', err);
-      return res.send('Error en la base de datos');
+      return res.status(500).send('Error en la base de datos');
     }
+    res.json(results);
+  });
+});
 
-    if (results.length === 0) {
-      return res.send('La tabla está vacía.');
+// Ruta para insertar nueva guitarra
+app.post('/agregar', (req, res) => {
+  const { marca, modelo } = req.body;
+  pool.query('INSERT INTO guitarras (marca, modelo) VALUES (?, ?)', [marca, modelo], (err, results) => {
+    if (err) {
+      console.error('Error al insertar:', err);
+      return res.status(500).send('Error al insertar en la base de datos');
     }
-
-    let html = '<h1>Guitarras que he tenido</h1><table border="1"><tr>A unas las extrano mas que otras';
-
-    Object.keys(results[0]).forEach(col => {
-      html += `<th>${col}</th>`;
-    });
-    html += '</tr>';
-
-    results.forEach(row => {
-      html += '<tr>';
-      Object.values(row).forEach(val => {
-        html += `<td>${val}</td>`;
-      });
-      html += '</tr>';
-    });
-
-    html += '</table>';
-    res.send(html);
+    res.redirect('/');
   });
 });
 
