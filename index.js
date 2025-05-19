@@ -22,7 +22,7 @@ const pool = mysql.createPool({
 });
 
 // Ruta para servir index.html
-app.get('/', (req, res) => {
+app.get('/guitarras', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -38,8 +38,8 @@ app.get('/guitarras', (req, res) => {
 });
 
 // Ruta para insertar nueva guitarra
-app.post('/agregar', (req, res) => {
-  const { marca, modelo } = req.body;
+app.post('/guitarras', (req, res) => {
+  const { Marca, Modelo } = req.body;
   pool.query('INSERT INTO guitarras (marca, modelo) VALUES (?, ?)', [marca, modelo], (err, results) => {
     if (err) {
       console.error('Error al insertar:', err);
