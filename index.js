@@ -42,13 +42,21 @@ app.get('/api/guitarras', (req, res) => {
 // Ruta para insertar nueva guitarra
 app.post('/agregar', (req, res) => {
   const { Marca, Modelo, Configuracion, CantPots } = req.body;
-  pool.query('INSERT INTO guitarras (Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?)', [Marca, Modelo, Configuracion, CantPots], (err, results) => {
-    if (err) {
-      console.error('Error al insertar:', err);
-      return res.status(500).send('Error al insertar en la base de datos');
-    }
-    res.redirect('/');
-  });
+  
+  // Validación básica
+  if (!Marca || !Modelo || !Configuracion || !CantPots) {
+    return res.status(400).send('Todos los campos son requeridos');
+  }
+
+  pool.query('INSERT INTO guitarras (Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?)', 
+    [Marca, Modelo, Configuracion, CantPots], 
+    (err, results) => {
+      if (err) {
+        console.error('Error al insertar:', err);
+        return res.status(500).send('Error al insertar en la base de datos');
+      }
+      res.redirect('/');
+    });
 });
 
 app.listen(PORT, () => {
