@@ -42,7 +42,7 @@ app.get('/api/guitarras', (req, res) => {
 // Ruta para insertar nueva guitarra
 app.post('/agregar', (req, res) => {
   const { Marca, Modelo, Configuracion, CantPots } = req.body;
-  pool.query('INSERT INTO guitarras (marca, modelo) VALUES (?, ?)', [marca, modelo], (err, results) => {
+  pool.query('INSERT INTO guitarras (marca, modelo) VALUES (?, ?)', [Marca, Modelo, Configuracion, CantPots], (err, results) => {
     if (err) {
       console.error('Error al insertar:', err);
       return res.status(500).send('Error al insertar en la base de datos');
