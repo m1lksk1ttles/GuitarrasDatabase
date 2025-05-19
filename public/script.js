@@ -34,4 +34,16 @@ window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('caja3').innerHTML = '<p>Error cargando datos.</p>';
     });
 
+    document.getElementById('eliminarBtn').addEventListener('click', () => {
+    const form = document.getElementById('formGuitarra');
+
+    const accionInput = document.createElement('input');
+    accionInput.type = 'hidden';
+    accionInput.name = 'accion';
+    accionInput.value = 'eliminar';
+    form.appendChild(accionInput);
+
+    form.submit();
+  });
+  
 });
