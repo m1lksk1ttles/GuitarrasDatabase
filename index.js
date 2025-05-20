@@ -25,19 +25,13 @@ app.get('/', (req, res) => {
 });
 
 // Endpoints API
-app.get('/guitarras', (req, res) => {
-  let sql = 'SELECT * FROM guitarras';
-  const id = req.query.idGuitarras;
-
-  if (id) {
-    sql = 'SELECT * FROM guitarras WHERE idGuitarras = ?';
-  }
-
-  pool.query(sql, id ? [id] : [], (err, results) => {
+app.get('/api/guitarras', (req, res) => {
+  pool.query('SELECT * FROM guitarras', (err, results) => {
     if (err) {
-      console.error('Error al consultar:', err);
-      return res.status(500).json({ mensaje: 'Error al obtener guitarras' });
+      console.error('Error en DB:', err);
+      return res.status(500).json({ error: 'Error en la base de datos' });
     }
+
     res.json(results);
   });
 });
