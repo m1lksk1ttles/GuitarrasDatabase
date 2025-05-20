@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     const data = Object.fromEntries(new FormData(form).entries());
-    data.idGuitarras = parseInt(data.idGuitarras);
+    data.idGuitarra = parseInt(data.idGuitarra);
     data.CantPots = parseInt(data.CantPots);
 
     try {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   actualizarBtn.addEventListener('click', async () => {
     const data = Object.fromEntries(new FormData(form).entries());
-    data.idGuitarras = parseInt(data.idGuitarras);
+    data.idGuitarra = parseInt(data.idGuitarra);
     data.CantPots = parseInt(data.CantPots);
 
     try {
@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/guitarras');
       const guitarras = await res.json();
 
-      let html = '<table><tr><th>idGuitarras</th><th>Marca</th><th>Modelo</th><th>Configuración</th><th>Pots</th></tr>';
+      let html = '<table><tr><th>idGuitarra</th><th>Marca</th><th>Modelo</th><th>Configuración</th><th>Pots</th></tr>';
       guitarras.forEach(g => {
         html += `<tr>
-          <td>${g.idGuitarras}</td>
+          <td>${g.idGuitarra}</td>
           <td>${g.Marca}</td>
           <td>${g.Modelo}</td>
           <td>${g.Configuracion}</td>

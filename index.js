@@ -20,7 +20,9 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.get('/guitarras', (req, res) => {
   pool.query('SELECT * FROM guitarras', (err, results) => {
