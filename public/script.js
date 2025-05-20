@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     const data = Object.fromEntries(new FormData(form).entries());
-    data.idGuitarras = parseInt(data.idGuitarra);
+    data.idGuitarras = parseInt(data.idGuitarras);
     data.CantPots = parseInt(data.CantPots);
 
     try {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   actualizarBtn.addEventListener('click', async () => {
     const data = Object.fromEntries(new FormData(form).entries());
-    data.idGuitarras = parseInt(data.idGuitarra);
+    data.idGuitarras = parseInt(data.idGuitarras);
     data.CantPots = parseInt(data.CantPots);
 
     try {
