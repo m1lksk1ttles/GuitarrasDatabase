@@ -1,58 +1,88 @@
-window.addEventListener('DOMContentLoaded', () => {
-  fetch('/api/guitarras')
-    .then(res => res.json())
-    .then(data => {
-        
-      const container = document.getElementById('caja3');
-      if (!data.length) {
-        container.innerHTML = '<p>No hay guitarras registradas todavía.</p>';
-        return;
-      }
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('formGuitarra');
+  const tablaDiv = document.getElementById('tabla');
+  const eliminarBtn = document.getElementById('eliminarBtn');
+  const actualizarBtn = document.getElementById('actualizarBtn');
 
-      let html = '<h2>A unas las extraño más que otras</h2><table border="1"><tr>';
+  cargarGuitarras();
 
-      // Encabezados
-      Object.keys(data[0]).forEach(col => {
-        html += `<th>${col}</th>`;
-      });
-      html += '</tr>';
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      // Filas
-      data.forEach(row => {
-        html += '<tr>';
-        Object.values(row).forEach(val => {
-          html += `<td>${val}</td>`;
-        });
-        html += '</tr>';
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.idGuitarras = parseInt(data.idGuitarra);
+    data.CantPots = parseInt(data.CantPots);
+
+    try {
+      const res = await fetch('/guitarras', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
 
+      const resultado = await res.json();
+      alert(resultado.mensaje);
+      cargarGuitarras();
+      form.reset();
+    } catch (error) {
+      alert('Error al agregar guitarra');
+    }
+  });
+
+  eliminarBtn.addEventListener('click', async () => {
+    const id = document.querySelector('[name="idGuitarra"]').value;
+    if (!id) return alert('Debes ingresar un ID');
+
+    try {
+      const res = await fetch(`/guitarras?idGuitarras=${id}`, { method: 'DELETE' });
+      const resultado = await res.json();
+      alert(resultado.mensaje);
+      cargarGuitarras();
+    } catch (error) {
+      alert('Error al eliminar guitarra');
+    }
+  });
+
+  actualizarBtn.addEventListener('click', async () => {
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.idGuitarras = parseInt(data.idGuitarra);
+    data.CantPots = parseInt(data.CantPots);
+
+    try {
+      const res = await fetch('/guitarras', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const resultado = await res.json();
+      alert(resultado.mensaje);
+      cargarGuitarras();
+    } catch (error) {
+      alert('Error al actualizar guitarra');
+    }
+  });
+
+  async function cargarGuitarras() {
+    try {
+      const res = await fetch('/guitarras');
+      const guitarras = await res.json();
+
+      let html = '<table><tr><th>ID</th><th>Marca</th><th>Modelo</th><th>Configuración</th><th>Pots</th></tr>';
+      guitarras.forEach(g => {
+        html += `<tr>
+          <td>${g.idGuitarras}</td>
+          <td>${g.Marca}</td>
+          <td>${g.Modelo}</td>
+          <td>${g.Configuracion}</td>
+          <td>${g.CantPots}</td>
+        </tr>`;
+      });
       html += '</table>';
-      container.innerHTML = html;
-    })
-    .catch(err => {
-      console.error('Error cargando guitarras:', err);
-      document.getElementById('caja3').innerHTML = '<p>Error cargando datos.</p>';
-    });
 
-    document.getElementById('eliminarBtn').addEventListener('click', () => {
-    const form = document.getElementById('formGuitarra');
-
-    const accionInput = document.createElement('input');
-    accionInput.type = 'hidden';
-    accionInput.name = 'accion';
-    accionInput.value = 'eliminar';
-    form.appendChild(accionInput);
-
-    form.submit();
-  });
-
-  document.getElementById('actualizarBtn').addEventListener('click', () => {
-    const accionInput = document.createElement('input');
-    accionInput.type = 'hidden';
-    accionInput.name = 'accion';
-    accionInput.value = 'actualizar';
-    form.appendChild(accionInput);
-    form.submit();
-  });
-  
+      tablaDiv.innerHTML = html;
+    } catch (error) {
+      tablaDiv.innerHTML = 'Error cargando datos';
+    }
+  }
 });

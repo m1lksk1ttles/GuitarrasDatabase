@@ -40,15 +40,15 @@
     </div>
     <div id="caja2" class="caja">
       <h2>Agregar Guitarra</h2>
-      <form id="formGuitarra" method="POST" action="/accion">
-       <label>idGuitarra: <input type="number" name="idGuitarra" required></label><br><br>
-       <label>Marca: <input type="text" name="Marca"></label><br><br>
-       <label>Modelo: <input type="text" name="Modelo"></label><br><br>
-       <label>Configuracion: <input type="text" name="Configuracion"></label><br><br>
-       <label>Cantidad de Potenciometros: <input type="number" name="CantPots"></label><br><br>
-       <button type="submit" name="accion" value="agregar">Agregar</button>
-       <button type="button" id="eliminarBtn" name="accion" value="eliminar">Eliminar</button>
-       <button type="button" id="actualizarBtn">Actualizar</button>
+      <form id="formGuitarra">
+        <label>idGuitarra: <input type="number" name="idGuitarra" required></label><br><br>
+        <label>Marca: <input type="text" name="Marca"></label><br><br>
+        <label>Modelo: <input type="text" name="Modelo"></label><br><br>
+        <label>Configuracion: <input type="text" name="Configuracion"></label><br><br>
+        <label>Cantidad de Potenciometros: <input type="number" name="CantPots"></label><br><br>
+        <button type="submit">Agregar</button>
+        <button type="button" id="eliminarBtn">Eliminar</button>
+        <button type="button" id="actualizarBtn">Actualizar</button>
       </form>
     </div>
     <div id="caja3" class="caja">
@@ -56,7 +56,6 @@
       <div id="tabla"></div>
     </div>
   </div>
-
-  <script src="script.js"></script>
+  <script src="frontend.js"></script>
 </body>
 </html>

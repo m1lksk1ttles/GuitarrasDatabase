@@ -9,7 +9,6 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Conexión a base de datos
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -21,17 +20,11 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// Página principal
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-
-// =========================
-// ==== ENDPOINTS API =====
-// =========================
-
-// ✅ GET guitarras (todas o por id)
+// Endpoints API
 app.get('/guitarras', (req, res) => {
   let sql = 'SELECT * FROM guitarras';
   const id = req.query.idGuitarras;
@@ -49,7 +42,6 @@ app.get('/guitarras', (req, res) => {
   });
 });
 
-// ✅ POST - insertar guitarra
 app.post('/guitarras', (req, res) => {
   const { idGuitarras, Marca, Modelo, Configuracion, CantPots } = req.body;
 
@@ -62,17 +54,15 @@ app.post('/guitarras', (req, res) => {
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  pool.query(sql, [idGuitarras, Marca, Modelo, Configuracion, CantPots], (err, results) => {
+  pool.query(sql, [idGuitarras, Marca, Modelo, Configuracion, CantPots], (err) => {
     if (err) {
       console.error('Error al insertar:', err);
       return res.status(500).json({ mensaje: 'Error al insertar guitarra' });
     }
-
     res.json({ mensaje: 'Guitarra agregada exitosamente' });
   });
 });
 
-// ✅ PUT - actualizar guitarra
 app.put('/guitarras', (req, res) => {
   const { idGuitarras, Marca, Modelo, Configuracion, CantPots } = req.body;
 
@@ -100,7 +90,6 @@ app.put('/guitarras', (req, res) => {
   });
 });
 
-// ✅ DELETE - eliminar guitarra
 app.delete('/guitarras', (req, res) => {
   const { idGuitarras } = req.query;
 
@@ -123,9 +112,6 @@ app.delete('/guitarras', (req, res) => {
     res.json({ mensaje: 'Guitarra eliminada correctamente' });
   });
 });
-
-
-// =========================
 
 app.listen(PORT, () => {
   console.log(`Servidor web corriendo en http://localhost:${PORT}`);
