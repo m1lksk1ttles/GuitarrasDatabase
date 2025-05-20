@@ -1,17 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formGuitarra');
-  const tablaDiv = document.getElementById('tabla');
   const eliminarBtn = document.getElementById('eliminarBtn');
   const actualizarBtn = document.getElementById('actualizarBtn');
+  const tablaDiv = document.getElementById('tabla');
 
-  cargarGuitarras();
+  // Función para mostrar guitarras en tabla
+  async function cargarGuitarras() {
+    try {
+      const res = await fetch('/guitarras');
+      const guitarras = await res.json();
 
+      let tablaHTML = `
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Configuración</th>
+            <th>Potenciómetros</th>
+          </tr>
+      `;
+
+      guitarras.forEach(g => {
+        tablaHTML += `
+          <tr>
+            <td>${g.idGuitarra}</td>
+            <td>${g.Marca}</td>
+            <td>${g.Modelo}</td>
+            <td>${g.Configuracion}</td>
+            <td>${g.CantPots}</td>
+          </tr>`;
+      });
+
+      tablaHTML += '</table>';
+      tablaDiv.innerHTML = tablaHTML;
+    } catch (error) {
+      console.error('Error al cargar guitarras:', error);
+    }
+  }
+
+  // Función para limpiar el formulario
+  function limpiarFormulario() {
+    form.reset();
+  }
+
+  // Agregar guitarra
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const data = Object.fromEntries(new FormData(form).entries());
-    data.idGuitarra = parseInt(data.idGuitarra);
-    data.CantPots = parseInt(data.CantPots);
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data.CantPots = Number(data.CantPots);
+    data.idGuitarra = Number(data.idGuitarra);
 
     try {
       const res = await fetch('/guitarras', {
@@ -20,33 +59,40 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(data)
       });
 
-      const resultado = await res.json();
-      alert(resultado.mensaje);
+      const result = await res.json();
+      alert(result.mensaje);
+      limpiarFormulario();
       cargarGuitarras();
-      form.reset();
     } catch (error) {
-      alert('Error al agregar guitarra');
+      console.error('Error al agregar guitarra:', error);
     }
   });
 
+  // Eliminar guitarra
   eliminarBtn.addEventListener('click', async () => {
-    const id = document.querySelector('[name="idGuitarras"]').value;
-    if (!id) return alert('Debes ingresar un ID');
+    const idGuitarra = form.idGuitarra.value;
+    if (!idGuitarra) return alert('Introduce un ID para eliminar');
 
     try {
-      const res = await fetch(`/guitarras?idGuitarras=${id}`, { method: 'DELETE' });
-      const resultado = await res.json();
-      alert(resultado.mensaje);
+      const res = await fetch(`/guitarras?idGuitarra=${idGuitarra}`, {
+        method: 'DELETE'
+      });
+
+      const result = await res.json();
+      alert(result.mensaje);
+      limpiarFormulario();
       cargarGuitarras();
     } catch (error) {
-      alert('Error al eliminar guitarra');
+      console.error('Error al eliminar guitarra:', error);
     }
   });
 
+  // Actualizar guitarra
   actualizarBtn.addEventListener('click', async () => {
-    const data = Object.fromEntries(new FormData(form).entries());
-    data.idGuitarra = parseInt(data.idGuitarra);
-    data.CantPots = parseInt(data.CantPots);
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data.CantPots = Number(data.CantPots);
+    data.idGuitarra = Number(data.idGuitarra);
 
     try {
       const res = await fetch('/guitarras', {
@@ -55,34 +101,15 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(data)
       });
 
-      const resultado = await res.json();
-      alert(resultado.mensaje);
+      const result = await res.json();
+      alert(result.mensaje);
+      limpiarFormulario();
       cargarGuitarras();
     } catch (error) {
-      alert('Error al actualizar guitarra');
+      console.error('Error al actualizar guitarra:', error);
     }
   });
 
-  async function cargarGuitarras() {
-    try {
-      const res = await fetch('/guitarras');
-      const guitarras = await res.json();
-
-      let html = '<table><tr><th>idGuitarra</th><th>Marca</th><th>Modelo</th><th>Configuración</th><th>Pots</th></tr>';
-      guitarras.forEach(g => {
-        html += `<tr>
-          <td>${g.idGuitarra}</td>
-          <td>${g.Marca}</td>
-          <td>${g.Modelo}</td>
-          <td>${g.Configuracion}</td>
-          <td>${g.CantPots}</td>
-        </tr>`;
-      });
-      html += '</table>';
-
-      tablaDiv.innerHTML = html;
-    } catch (error) {
-      tablaDiv.innerHTML = 'Error cargando datos';
-    }
-  }
+  // Cargar guitarras al iniciar
+  cargarGuitarras();
 });

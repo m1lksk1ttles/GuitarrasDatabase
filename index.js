@@ -36,18 +36,18 @@ app.get('/guitarras', (req, res) => {
 });
 
 app.post('/guitarras', (req, res) => {
-  const { idGuitarras, Marca, Modelo, Configuracion, CantPots } = req.body;
+  const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
 
-  if (!idGuitarras || !Marca || !Modelo || !Configuracion || !CantPots) {
+  if (!idGuitarra || !Marca || !Modelo || !Configuracion || !CantPots) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
 
   const sql = `
-    INSERT INTO guitarras (idGuitarras, Marca, Modelo, Configuracion, CantPots)
+    INSERT INTO guitarras (idGuitarra, Marca, Modelo, Configuracion, CantPots)
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  pool.query(sql, [idGuitarras, Marca, Modelo, Configuracion, CantPots], (err) => {
+  pool.query(sql, [idGuitarra, Marca, Modelo, Configuracion, CantPots], (err) => {
     if (err) {
       console.error('Error al insertar:', err);
       return res.status(500).json({ mensaje: 'Error al insertar guitarra' });
@@ -57,19 +57,19 @@ app.post('/guitarras', (req, res) => {
 });
 
 app.put('/guitarras', (req, res) => {
-  const { idGuitarras, Marca, Modelo, Configuracion, CantPots } = req.body;
+  const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
 
-  if (!idGuitarras || !Marca || !Modelo || !Configuracion || !CantPots) {
+  if (!idGuitarra || !Marca || !Modelo || !Configuracion || !CantPots) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
 
   const sql = `
     UPDATE guitarras
     SET Marca = ?, Modelo = ?, Configuracion = ?, CantPots = ?
-    WHERE idGuitarras = ?
+    WHERE idGuitarra = ?
   `;
 
-  pool.query(sql, [Marca, Modelo, Configuracion, CantPots, idGuitarras], (err, results) => {
+  pool.query(sql, [Marca, Modelo, Configuracion, CantPots, idGuitarra], (err, results) => {
     if (err) {
       console.error('Error al actualizar:', err);
       return res.status(500).json({ mensaje: 'Error al actualizar guitarra' });
@@ -84,15 +84,15 @@ app.put('/guitarras', (req, res) => {
 });
 
 app.delete('/guitarras', (req, res) => {
-  const { idGuitarras } = req.query;
+  const { idGuitarra } = req.query;
 
-  if (!idGuitarras) {
-    return res.status(400).json({ mensaje: 'Falta idGuitarras' });
+  if (!idGuitarra) {
+    return res.status(400).json({ mensaje: 'Falta idGuitarra' });
   }
 
-  const sql = 'DELETE FROM guitarras WHERE idGuitarras = ?';
+  const sql = 'DELETE FROM guitarras WHERE idGuitarra = ?';
 
-  pool.query(sql, [idGuitarras], (err, results) => {
+  pool.query(sql, [idGuitarra], (err, results) => {
     if (err) {
       console.error('Error al eliminar:', err);
       return res.status(500).json({ mensaje: 'Error al eliminar guitarra' });
