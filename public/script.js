@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   eliminarBtn.addEventListener('click', async () => {
-    const id = document.querySelector('[name="idGuitarra"]').value;
+    const id = document.querySelector('[name="idGuitarras"]').value;
     if (!id) return alert('Debes ingresar un ID');
 
     try {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/guitarras');
       const guitarras = await res.json();
 
-      let html = '<table><tr><th>ID</th><th>Marca</th><th>Modelo</th><th>Configuración</th><th>Pots</th></tr>';
+      let html = '<table><tr><th>idGuitarras</th><th>Marca</th><th>Modelo</th><th>Configuración</th><th>Pots</th></tr>';
       guitarras.forEach(g => {
         html += `<tr>
           <td>${g.idGuitarras}</td>
