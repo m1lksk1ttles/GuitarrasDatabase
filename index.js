@@ -24,8 +24,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Endpoints API
-app.get('/api/guitarras', (req, res) => {
+app.get('/guitarras', (req, res) => {
   pool.query('SELECT * FROM guitarras', (err, results) => {
     if (err) {
       console.error('Error en DB:', err);
