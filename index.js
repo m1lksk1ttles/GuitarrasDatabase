@@ -37,7 +37,7 @@ app.get('/guitarras', (req, res) => {
 
 app.post('/guitarras', (req, res) => {
   const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
-  const sql = "";
+  let sql = "";
   if (!idGuitarra || !Marca || !Modelo || !Configuracion || !CantPots) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
@@ -58,7 +58,7 @@ app.post('/guitarras', (req, res) => {
 
 app.put('/guitarras', (req, res) => {
   const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
-  const sql = "";
+  let sql = "";
   if (!idGuitarra || !Marca || !Modelo || !Configuracion || !CantPots) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
@@ -82,7 +82,7 @@ app.put('/guitarras', (req, res) => {
 
 app.delete('/guitarras', (req, res) => {
   const { idGuitarra } = req.query;
-  const sql = "";
+  let sql = "";
   if (!idGuitarra) {
     return res.status(400).json({ mensaje: 'Falta idGuitarra' });
   }
