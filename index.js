@@ -37,15 +37,15 @@ app.get('/guitarras', (req, res) => {
 
 app.post('/guitarras', (req, res) => {
   const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
-
+  const sql = "";
   if (!idGuitarra || !Marca || !Modelo || !Configuracion || !CantPots) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
 
-  const sql = `
-    INSERT INTO guitarras (idGuitarra, Marca, Modelo, Configuracion, CantPots)
-    VALUES (?, ?, ?, ?, ?)
-  `;
+  else 
+  {
+    sql = `INSERT INTO guitarras (idGuitarra, Marca, Modelo, Configuracion, CantPots) VALUES (?, ?, ?, ?, ?)`;
+  }
 
   pool.query(sql, [idGuitarra, Marca, Modelo, Configuracion, CantPots], (err) => {
     if (err) {
@@ -58,16 +58,13 @@ app.post('/guitarras', (req, res) => {
 
 app.put('/guitarras', (req, res) => {
   const { idGuitarra, Marca, Modelo, Configuracion, CantPots } = req.body;
-
+  const sql = "";
   if (!idGuitarra || !Marca || !Modelo || !Configuracion || !CantPots) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
-
-  const sql = `
-    UPDATE guitarras
-    SET Marca = ?, Modelo = ?, Configuracion = ?, CantPots = ?
-    WHERE idGuitarra = ?
-  `;
+  else {
+    sql = `UPDATE guitarras SET Marca = ?, Modelo = ?, Configuracion = ?, CantPots = ? WHERE idGuitarra = ?`;
+  }
 
   pool.query(sql, [Marca, Modelo, Configuracion, CantPots, idGuitarra], (err, results) => {
     if (err) {
@@ -85,12 +82,14 @@ app.put('/guitarras', (req, res) => {
 
 app.delete('/guitarras', (req, res) => {
   const { idGuitarra } = req.query;
-
+  const sql = "";
   if (!idGuitarra) {
     return res.status(400).json({ mensaje: 'Falta idGuitarra' });
   }
-
-  const sql = 'DELETE FROM guitarras WHERE idGuitarra = ?';
+  else
+  {
+    sql = 'DELETE FROM guitarras WHERE idGuitarra = ?';
+  }
 
   pool.query(sql, [idGuitarra], (err, results) => {
     if (err) {

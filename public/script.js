@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const actualizarBtn = document.getElementById('actualizarBtn');
   const tablaDiv = document.getElementById('tabla');
 
-  // Función para mostrar guitarras en tabla
   async function cargarGuitarras() {
     try {
       const res = await fetch('/guitarras');
@@ -39,12 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Función para limpiar el formulario
   function limpiarFormulario() {
     form.reset();
   }
 
-  // Agregar guitarra
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
@@ -68,13 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Eliminar guitarra
   eliminarBtn.addEventListener('click', async () => {
     const idGuitarra = form.idGuitarra.value;
     if (!idGuitarra) return alert('Introduce un ID para eliminar');
 
-    try {
-      const res = await fetch(`/guitarras?idGuitarra=${idGuitarra}`, {
+    try 
+    {
+      const res = await fetch(`/guitarras?idGuitarra=${idGuitarra}`, 
+      {
         method: 'DELETE'
       });
 
@@ -87,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Actualizar guitarra
   actualizarBtn.addEventListener('click', async () => {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
@@ -110,6 +107,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Cargar guitarras al iniciar
   cargarGuitarras();
 });
